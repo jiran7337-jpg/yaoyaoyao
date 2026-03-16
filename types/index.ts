@@ -7,6 +7,9 @@ export interface QuestionPayload {
   category: QuestionCategory;
   type: DivinationType;
   createdAt: string;
+  systemQuestion?: string;
+  systemAnswer?: string;
+  seed?: number;
 }
 
 export interface InterpretationContent {

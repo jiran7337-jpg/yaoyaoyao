@@ -21,6 +21,18 @@ export function ResultSection({ session }: { session: DivinationSession }) {
           <span className="text-slate-400">时间：</span>
           {new Date(session.question.createdAt).toLocaleString('zh-CN')}
         </p>
+        {session.question.type === 'tarot' && session.question.systemQuestion && (
+          <p>
+            <span className="text-slate-400">系统提问：</span>
+            {session.question.systemQuestion}
+          </p>
+        )}
+        {session.question.type === 'tarot' && session.question.systemAnswer && (
+          <p>
+            <span className="text-slate-400">你的回答：</span>
+            {session.question.systemAnswer}
+          </p>
+        )}
       </div>
     </section>
   );
