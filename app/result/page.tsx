@@ -6,7 +6,7 @@ import { InterpretationTabs } from '@/components/InterpretationTabs';
 import { LiuyaoVisualizer } from '@/components/LiuyaoVisualizer';
 import { ResultSection } from '@/components/ResultSection';
 import { TarotSpread } from '@/components/TarotSpread';
-import { isLiuyaoSession } from '@/lib/typeGuards';
+import { isLiuyaoSession, isTarotSession } from '@/lib/typeGuards';
 import { getCurrentSession, saveHistoryRecord } from '@/lib/storage';
 import { DivinationSession } from '@/types';
 import { useEffect, useState } from 'react';
@@ -61,13 +61,13 @@ export default function ResultPage() {
             <p className="mt-3 text-accent">建议：{session.result.advice}</p>
           </div>
         </section>
-      ) : (
+      ) : isTarotSession(session) ? (
         <section className="glass-card p-6">
           <TarotSpread cards={session.result.cards} />
           <p className="mt-4 text-sm text-slate-200">{session.result.summary}</p>
           <p className="mt-2 text-sm text-accent">建议：{session.result.advice}</p>
         </section>
-      )}
+      ) : null}
 
       <InterpretationTabs
         style={style}

@@ -1,4 +1,5 @@
-import { interpretationTemplates, liuyaoHexagrams, tarotDeck } from '@/data/mockData';
+import { interpretationTemplates, liuyaoHexagrams } from '@/data/mockData';
+import { drawThreeTarotCards } from '@/lib/tarot';
 import {
   LiuyaoLine,
   LiuyaoResult,
@@ -8,20 +9,20 @@ import {
   TarotResult
 } from '@/types';
 
-const positions: Array<'过去' | '现在' | '未来'> = ['过去', '现在', '未来'];
-
 const randomInt = (max: number) => Math.floor(Math.random() * max);
 
 export const createQuestionPayload = (
   question: string,
   category: QuestionCategory,
-  type: 'liuyao' | 'tarot'
+  type: 'liuyao' | 'tarot',
+  extras?: { systemQuestion?: string; systemAnswer?: string; seed?: number }
 ): QuestionPayload => ({
   id: crypto.randomUUID(),
   question,
   category,
   type,
-  createdAt: new Date().toISOString()
+  createdAt: new Date().toISOString(),
+  ...extras
 });
 
 export const generateLiuyaoResult = (category: QuestionCategory): LiuyaoResult => {
@@ -50,19 +51,8 @@ export const generateLiuyaoResult = (category: QuestionCategory): LiuyaoResult =
   };
 };
 
-export const generateTarotResult = (category: QuestionCategory): TarotResult => {
-  const pool = [...tarotDeck].sort(() => Math.random() - 0.5).slice(0, 3);
-
-  const cards: TarotCardDraw[] = pool.map((card, idx) => {
-    const orientation = Math.random() > 0.5 ? '正位' : '逆位';
-    return {
-      id: card.id,
-      name: card.name,
-      position: positions[idx],
-      orientation,
-      meaning: orientation === '正位' ? card.upright : card.reversed
-    };
-  });
+export const generateTarotResult = (category: QuestionCategory, seed: number): TarotResult => {
+  const cards: TarotCardDraw[] = drawThreeTarotCards(seed);
 
   const templates = interpretationTemplates[category];
   return {
